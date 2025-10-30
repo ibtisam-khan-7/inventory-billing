@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Sales Report{% endblock %}
+{% block content %}
+<div class="card p-4 shadow-sm">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-primary mb-0">
+      <i class="bi bi-bar-chart"></i> Monthly Sales Report
+    </h2>
+    <div>
+      <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary me-2">
+        <i class="bi bi-house-door"></i> Back to Dashboard
+      </a>
+      <a href="/download-report" class="btn btn-success">
+        <i class="bi bi-file-earmark-pdf"></i> Download PDF
+      </a>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <h5 class="text-muted">
+      Report for: <strong>{{ date_today }}</strong>
+    </h5>
+  </div>
+
+  <table class="table table-hover align-middle">
+    <thead class="table-light">
+      <tr>
+        <th><i class="bi bi-tag"></i> Product Name</th>
+        <th><i class="bi bi-cash"></i> Price (PKR)</th>
+        <th><i class="bi bi-basket"></i> Quantity</th>
+        <th><i class="bi bi-calculator"></i> Total (PKR)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for product in products %}
+      <tr>
+        <td>{{ product.name }}</td>
+        <td>{{ product.price }}</td>
+        <td>{{ product.quantity }}</td>
+        <td class="fw-bold text-success">{{ product.price * product.quantity }}</td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="4" class="text-center text-muted py-4">
+          No products found in this month 💤
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="mt-4 text-end">
+    <h4 class="fw-bold text-dark">
+      <i class="bi bi-wallet2"></i> Total Inventory Value: 
+      <span class="text-success">PKR {{ total_value }}</span>
+    </h4>
+  </div>
+</div>
+{% endblock %}

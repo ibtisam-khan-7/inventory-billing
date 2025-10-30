@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4">
+  <h2 class="text-primary mb-4">
+    <i class="bi bi-speedometer2"></i> Inventory Dashboard
+  </h2>
+
+  <div class="row g-4">
+    <!-- Total Products -->
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 text-center p-4">
+        <div class="text-primary display-6 mb-2"><i class="bi bi-box-seam"></i></div>
+        <h5 class="fw-bold">Total Products</h5>
+        <p class="display-6 fw-bold text-dark">{{ total_products }}</p>
+      </div>
+    </div>
+
+    <!-- Total Quantity -->
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 text-center p-4">
+        <div class="text-success display-6 mb-2"><i class="bi bi-stack"></i></div>
+        <h5 class="fw-bold">Total Quantity</h5>
+        <p class="display-6 fw-bold text-dark">{{ total_quantity }}</p>
+      </div>
+    </div>
+
+    <!-- Total Value -->
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 text-center p-4">
+        <div class="text-warning display-6 mb-2"><i class="bi bi-cash-stack"></i></div>
+        <h5 class="fw-bold">Total Inventory Value</h5>
+        <p class="display-6 fw-bold text-success">PKR {{ "{:,.0f}".format(total_value) }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart Section -->
+  <div class="card mt-5 shadow-sm border-0">
+    <div class="card-body">
+      <h4 class="text-secondary mb-3"><i class="bi bi-bar-chart"></i> Product Quantities</h4>
+      <canvas id="inventoryChart" height="100"></canvas>
+    </div>
+  </div>
+
+  <!-- Navigation Buttons -->
+  <div class="mt-4 text-center">
+    <a href="/" class="btn btn-outline-primary btn-lg me-2">
+      <i class="bi bi-box"></i> View Products
+    </a>
+    <a href="/sales-report" class="btn btn-outline-success btn-lg">
+      <i class="bi bi-file-earmark-bar-graph"></i> Sales Report
+    </a>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('inventoryChart').getContext('2d');
+  const chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: {{ names | safe }},
+      datasets: [{
+        label: 'Quantity in Stock',
+        data: {{ quantities | safe }},
+        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 1,
+        borderRadius: 5
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            stepSize: 1
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          display: false
+        }
+      }
+    }
+  });
+</script>
+{% endblock %}
