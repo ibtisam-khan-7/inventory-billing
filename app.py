@@ -1,18 +1,19 @@
-from flask import Flask, render_template, request, redirect, make_response, url_for
-from pymongo import MongoClient
-from bson import ObjectId
+from flask import Flask, render_template, request, redirect, make_response
 from weasyprint import HTML
-import datetime
+from datetime import date
+from pymongo import MongoClient
 
 app = Flask(__name__)
 client = MongoClient("mongodb://localhost:27017/")
 db = client["inventory_db"]
 products_col = db["products"]
 
+
 @app.route("/")
 def list_products():
     all_products = list(products_col.find())
     return render_template("products.html", products=all_products)
+
 
 @app.route("/add", methods=["GET", "POST"])
 def add_product():
@@ -24,26 +25,8 @@ def add_product():
         return redirect("/")
     return render_template("add_product.html")
 
-@app.route("/edit/<id>", methods=["GET", "POST"])
-def edit_product(id):
-    product = products_col.find_one({"_id": ObjectId(id)})
-    if request.method == "POST":
-        name = request.form["name"]
-        price = float(request.form["price"])
-        quantity = int(request.form["quantity"])
 
-        products_col.update_one(
-            {"_id": ObjectId(id)},
-            {"$set": {"name": name, "price": price, "quantity": quantity}}
-        )
-        return redirect("/")
-    return render_template("edit_product.html", product=product)
-
-@app.route("/delete/<id>")
-def delete_product(id):
-    products_col.delete_one({"_id": ObjectId(id)})
-    return redirect("/")
-
+# Dashboard Route
 @app.route("/dashboard")
 def dashboard():
     all_products = list(products_col.find())
@@ -51,6 +34,7 @@ def dashboard():
     total_quantity = sum(p["quantity"] for p in all_products)
     total_value = sum(p["price"] * p["quantity"] for p in all_products)
 
+    # Data for Chart.js
     names = [p["name"] for p in all_products]
     quantities = [p["quantity"] for p in all_products]
 
@@ -63,11 +47,13 @@ def dashboard():
         quantities=quantities,
     )
 
+
+# Sales Report Route
 @app.route("/sales-report")
 def sales_report():
     all_products = list(products_col.find())
     total_value = sum(p["price"] * p["quantity"] for p in all_products)
-    date_today = datetime.date.today().strftime("%B %Y")
+    date_today = date.today().strftime("%B %Y")
 
     return render_template(
         "sales_report.html",
@@ -76,11 +62,13 @@ def sales_report():
         date_today=date_today
     )
 
+
+# Download PDF Route
 @app.route("/download-report")
 def download_report():
     all_products = list(products_col.find())
     total_value = sum(p["price"] * p["quantity"] for p in all_products)
-    date_today = datetime.date.today().strftime("%B %Y")
+    date_today = date.today().strftime("%B %Y")
 
     html = render_template(
         "sales_report_pdf.html",
@@ -90,10 +78,12 @@ def download_report():
     )
 
     pdf = HTML(string=html).write_pdf()
+
     response = make_response(pdf)
     response.headers["Content-Type"] = "application/pdf"
     response.headers["Content-Disposition"] = f"inline; filename=sales_report_{date_today}.pdf"
     return response
+
 
 if __name__ == "__main__":
     app.run(debug=True)
