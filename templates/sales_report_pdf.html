@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Monthly Sales Report - {{ date_today }}</title>
+    <style>
+        body {
+            font-family: 'Helvetica', Arial, sans-serif;
+            margin: 30px;
+            color: #333;
+        }
+        header {
+            text-align: center;
+            border-bottom: 2px solid #0d6efd;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        header img {
+            width: 80px;
+            margin-bottom: 10px;
+        }
+        header h1 {
+            margin: 0;
+            color: #0d6efd;
+        }
+        .invoice-info {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        .invoice-info p {
+            margin: 3px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            font-size: 13px;
+        }
+        th {
+            background-color: #0d6efd;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        tfoot td {
+            font-weight: bold;
+            background-color: #e9ecef;
+        }
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="/static/logo.png" alt="Company Logo">
+        <h1>Smart Inventory Billing</h1>
+        <p>Monthly Sales Report - {{ date_today }}</p>
+    </header>
+
+    <div class="invoice-info">
+        <p><strong>Generated on:</strong> {{ date_today }}</p>
+        <p><strong>Total Products:</strong> {{ products|length }}</p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Price (PKR)</th>
+                <th>Quantity</th>
+                <th>Total (PKR)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in products %}
+            <tr>
+                <td>{{ p["name"] }}</td>
+                <td>{{ "%.2f"|format(p["price"]) }}</td>
+                <td>{{ p["quantity"] }}</td>
+                <td>{{ "%.2f"|format(p["price"] * p["quantity"]) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" align="right">Grand Total:</td>
+                <td>{{ "%.2f"|format(total_value) }} PKR</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <footer>
+        Smart Inventory Billing System © {{ date_today }} | Generated Automatically
+    </footer>
+</body>
+</html>

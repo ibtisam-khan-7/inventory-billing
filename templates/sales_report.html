@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Monthly Sales Report{% endblock %}
+{% block content %}
+<div class="card p-4">
+  <h2 class="text-primary mb-4"><i class="bi bi-receipt"></i> Sales Report - {{ date_today }}</h2>
+
+  <table class="table table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>Product Name</th>
+        <th>Price (PKR)</th>
+        <th>Quantity</th>
+        <th>Total Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in products %}
+      <tr>
+        <td>{{ p.name }}</td>
+        <td>{{ p.price }}</td>
+        <td>{{ p.quantity }}</td>
+        <td>{{ p.price * p.quantity }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h4 class="text-end mt-3">Total Stock Value: <b>{{ total_value }} PKR</b></h4>
+  <div class="text-end mt-4">
+    <a href="/download-report" class="btn btn-success">
+      <i class="bi bi-file-earmark-pdf"></i> Download PDF
+    </a>
+  </div>
+</div>
+{% endblock %}
