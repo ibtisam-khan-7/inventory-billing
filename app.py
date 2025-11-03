@@ -102,7 +102,7 @@ def download_report():
 
     response = make_response(pdf)
     response.headers["Content-Type"] = "application/pdf"
-    response.headers["Content-Disposition"] = f"inline; filename=sales_report_{date_today}.pdf"
+    response.headers["Content-Disposition"] = f"attachment; filename=sales_report_{date_today}.pdf"
     return response
 
 
