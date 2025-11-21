@@ -5,71 +5,93 @@
     <title>Monthly Sales Report - {{ date_today }}</title>
     <style>
         body {
-            font-family: 'Helvetica', Arial, sans-serif;
-            margin: 30px;
-            color: #333;
+            font-family: "Helvetica", Arial, sans-serif;
+            margin: 40px;
+            color: #2c2c2c;
+            line-height: 1.6;
         }
+
         header {
             text-align: center;
-            border-bottom: 2px solid #0d6efd;
-            padding-bottom: 10px;
-            margin-bottom: 30px;
+            border-bottom: 3px solid #0d6efd;
+            padding-bottom: 15px;
+            margin-bottom: 35px;
         }
+
         header img {
-            width: 80px;
-            margin-bottom: 10px;
+            width: 90px;
+            margin-bottom: 8px;
         }
+
         header h1 {
-            margin: 0;
+            margin: 5px 0 0 0;
             color: #0d6efd;
+            font-size: 28px;
         }
-        .invoice-info {
-            text-align: right;
-            margin-bottom: 20px;
+
+        header p {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #444;
         }
-        .invoice-info p {
-            margin: 3px 0;
+
+        .report-info {
+            margin-bottom: 25px;
+            font-size: 14px;
         }
+
+        .report-info p {
+            margin: 2px 0;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
+            margin-top: 18px;
             font-size: 13px;
         }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #dcdcdc;
+        }
+
         th {
             background-color: #0d6efd;
             color: white;
+            letter-spacing: 0.4px;
+            font-size: 13px;
         }
+
         tr:nth-child(even) {
-            background-color: #f8f9fa;
+            background-color: #f4f7fc;
         }
+
         tfoot td {
             font-weight: bold;
-            background-color: #e9ecef;
+            background-color: #e8eef6;
         }
+
         footer {
-            margin-top: 40px;
+            margin-top: 45px;
             text-align: center;
-            font-size: 12px;
+            font-size: 11px;
             color: #777;
-            border-top: 1px solid #ccc;
-            padding-top: 10px;
+            padding-top: 12px;
+            border-top: 1px solid #cfcfcf;
         }
     </style>
 </head>
 <body>
+
     <header>
-        <img src="/static/logo.png" alt="Company Logo">
+        <img src="" alt="Company Logo">
         <h1>Smart Inventory Billing</h1>
-        <p>Monthly Sales Report - {{ date_today }}</p>
+        <p>Monthly Sales Report — {{ date_today }}</p>
     </header>
 
-    <div class="invoice-info">
-        <p><strong>Generated on:</strong> {{ date_today }}</p>
+    <div class="report-info">
+        <p><strong>Generated On:</strong> {{ date_today }}</p>
         <p><strong>Total Products:</strong> {{ products|length }}</p>
     </div>
 
@@ -82,6 +104,7 @@
                 <th>Total (PKR)</th>
             </tr>
         </thead>
+
         <tbody>
             {% for p in products %}
             <tr>
@@ -92,6 +115,7 @@
             </tr>
             {% endfor %}
         </tbody>
+
         <tfoot>
             <tr>
                 <td colspan="3" align="right">Grand Total:</td>
@@ -101,7 +125,8 @@
     </table>
 
     <footer>
-        Smart Inventory Billing System © {{ date_today }} | Generated Automatically
+        Smart Inventory Billing System © {{ date_today }} — Generated Automatically
     </footer>
+
 </body>
 </html>
